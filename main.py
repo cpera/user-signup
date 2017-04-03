@@ -78,7 +78,8 @@ class MainHandler(webapp2.RequestHandler):
 		"""
 		self.response.write(page_header + formTag + page_footer )
 	def post(self):
-		self.response.write("Still working on the post method")
+		user_name = self.request.get("username")
+		self.response.write("Hello, " + user_name)
 app = webapp2.WSGIApplication([
 	('/', MainHandler)
 ], debug=True)

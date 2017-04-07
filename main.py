@@ -96,7 +96,7 @@ class MainHandler(webapp2.RequestHandler):
 				<tr>
 					<td><label for="username">Username</label></td>
 					<td>
-						<input name="username" type="text" value="{4}" >
+						<input name="username" type="text" value="{4}" required>
 						<span class="error">{0}</span>
 					</td>
 				</tr>
@@ -133,29 +133,38 @@ class MainHandler(webapp2.RequestHandler):
 		emailCheck = self.request.get("email")		
 		if not valid_username(userCheck):						
 			errorInForm = True
-			error = "Invalid user name format"			
-			self.redirect("/?errorUserName=" + error + "&postUserName=" + userCheck + "&postEmail=" + emailCheck)
+			errorUser = "Invalid user name format"			
+			#self.redirect("/?errorUserName=" + error + "&postUserName=" + userCheck + "&postEmail=" + emailCheck)
+		else:
+			errorUser = ''
 				
 		passwordCheck = self.request.get("password")	
 		if not valid_password(passwordCheck):						
 			errorInForm = True
-			error = "Password does not meet the criteria"			
-			self.redirect("/?errorPassword=" + error + "&postUserName=" + userCheck + "&postEmail=" + emailCheck)
+			errorPass = "Password does not meet the criteria"			
+			#self.redirect("/?errorPassword=" + error + "&postUserName=" + userCheck + "&postEmail=" + emailCheck)
+		else:
+			errorPass = ''
 				
 		verifyCheck = self.request.get("verify")
 		if passwordCheck <> verifyCheck:
 			errorInForm = True
-			error = "Passwords do not match"			
-			self.redirect("/?errorVerify=" + error + "&postUserName=" + userCheck + "&postEmail=" + emailCheck)			
+			errorVer = "Passwords do not match"			
+			#self.redirect("/?errorVerify=" + error + "&postUserName=" + userCheck + "&postEmail=" + emailCheck)			
+		else:
+			errorVer = ''
 		
 		if not valid_email(emailCheck):
 			errorInForm = True
-			error = "Email not in correct format"			
-			self.redirect("/?errorEmail =" + error + "&postUserName=" + userCheck + "&postEmail=" + emailCheck)
+			errorEmail = "Email not in correct format"			
+		else:
+			errorEmail = ''
 		
 		if not errorInForm:
 			#self.response.write("Welcome: " + userCheck)
 			self.redirect('/welcome?username=' + userCheck)
+		else:
+			self.redirect("/?errorUserName=" + errorUser + "&errorPassword=" + errorPass + "&errorVerify=" + errorVer + "&postUserName=" + userCheck + "&postEmail=" + emailCheck + "&errorEmail=" + errorEmail )
 
 class Welcome(webapp2.RequestHandler):	
     def get(self):
